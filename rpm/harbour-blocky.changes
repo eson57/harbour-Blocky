@@ -1,4 +1,5 @@
-* Mon Jun 08 2026 Andrea Scarpino <andrea@scarpino.dev> 0.0.9-2
+* Mon Jun 08 2026 Andrea Scarpino <andrea@scarpino.dev> 0.0.10-1
+- Document denylist format
 - Disable IPv6 in the default configuration.
 
 * Mon Jun 08 2026 Andrea Scarpino <andrea@scarpino.dev> 0.0.9-1

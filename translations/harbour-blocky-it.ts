@@ -32,10 +32,6 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Denylist URL</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Save and restart</source>
         <translation type="unfinished"></translation>
     </message>
@@ -56,15 +52,23 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Add denylist</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Raw configuration</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <source>The generated raw configuration:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Add sources to denylists to block ads and trackers. See &lt;a href=&quot;https://0xerr0r.github.io/blocky/latest/configuration/#definition-allowdenylists&quot;&gt;Blocky documentation&lt;/a&gt; for more details.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>URL, domain, wildcard or regex</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Add to denylist</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

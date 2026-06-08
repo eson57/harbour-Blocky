@@ -141,6 +141,21 @@ Page {
                 text: qsTr("Denylists")
             }
 
+            Label {
+                anchors {
+                    left: parent.left
+                    right: parent.right
+                    leftMargin: Theme.horizontalPageMargin
+                    rightMargin: Theme.horizontalPageMargin
+                }
+                color: Theme.secondaryColor
+                font.pixelSize: Theme.fontSizeExtraSmall
+                text: qsTr("Add sources to denylists to block ads and trackers. See <a href=\"https://0xerr0r.github.io/blocky/latest/configuration/#definition-allowdenylists\">Blocky documentation</a> for more details.")
+                textFormat: Text.StyledText
+                wrapMode: Text.Wrap
+                onLinkActivated: Qt.openUrlExternally(link)
+            }
+
             Repeater {
                 model: denylistModel
 
@@ -150,7 +165,7 @@ Page {
                     TextField {
                         width: parent.width - removeDenylistBtn.width - Theme.paddingMedium
                         text: value
-                        placeholderText: qsTr("Denylist URL")
+                        placeholderText: qsTr("URL, domain, wildcard or regex")
                         inputMethodHints: Qt.ImhNoAutoUppercase
                         onTextChanged: denylistModel.set(index, {
                             "value": text
@@ -167,7 +182,7 @@ Page {
 
             Button {
                 anchors.horizontalCenter: parent.horizontalCenter
-                text: qsTr("Add denylist")
+                text: qsTr("Add to denylist")
                 onClicked: denylistModel.append({
                     "value": ""
                 })

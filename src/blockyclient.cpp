@@ -24,14 +24,14 @@
 
 #include "blockyclient.h"
 
-#include <QDir>
-#include <QStandardPaths>
 #include <QCoreApplication>
+#include <QDir>
 #include <QEventLoop>
 #include <QNetworkAccessManager>
 #include <QNetworkReply>
 #include <QNetworkRequest>
 #include <QSettings>
+#include <QStandardPaths>
 #include <QUrl>
 #include <QUrlQuery>
 
@@ -40,13 +40,10 @@ BlockyClient::BlockyClient(QObject *parent)
     , m_network(new QNetworkAccessManager(this))
 {
     m_settingsPath = QStandardPaths::writableLocation(QStandardPaths::AppConfigLocation)
-                     + QDir::separator() + QCoreApplication::applicationName()
-                     + ".conf";
+                     + QDir::separator() + QCoreApplication::applicationName() + ".conf";
 }
 
-BlockyClient::~BlockyClient()
-{
-}
+BlockyClient::~BlockyClient() {}
 
 bool BlockyClient::disableBlocking(int durationSeconds)
 {

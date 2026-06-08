@@ -34,17 +34,14 @@
 
 static const QString CONFIG_PATH = QStringLiteral("/etc/blocky.yaml");
 
-BlockyManager::BlockyManager(QObject *parent) :
-    QObject(parent)
+BlockyManager::BlockyManager(QObject *parent)
+    : QObject(parent)
 {
     m_settingsPath = QStandardPaths::writableLocation(QStandardPaths::AppConfigLocation)
-                                 + QDir::separator() + QCoreApplication::applicationName()
-                                 + ".conf";
+                     + QDir::separator() + QCoreApplication::applicationName() + ".conf";
 }
 
-BlockyManager::~BlockyManager()
-{
-}
+BlockyManager::~BlockyManager() {}
 
 QString BlockyManager::readConfig()
 {
@@ -110,7 +107,7 @@ QString BlockyManager::fullConfig()
 }
 
 void BlockyManager::saveFromEntries(const QStringList &upstreamServers,
-                                     const QStringList &denylistUrls)
+                                    const QStringList &denylistUrls)
 {
     saveConfig(generateConfig(upstreamServers, denylistUrls));
 }
@@ -144,7 +141,8 @@ void BlockyManager::setDisableDuration(int seconds)
 
 void BlockyManager::resetConfig()
 {
-    const QString reference = QStringLiteral("/usr/share/%1/blocky.yaml").arg(QCoreApplication::applicationName());
+    const QString reference = QStringLiteral("/usr/share/%1/blocky.yaml")
+                                  .arg(QCoreApplication::applicationName());
     QFile ref(reference);
     if (!ref.exists()) {
         qWarning() << "reference config not found at" << reference;
@@ -226,7 +224,7 @@ QStringList BlockyManager::parseList(const QString &section, const QString &list
 }
 
 QString BlockyManager::generateConfig(const QStringList &upstreamServers,
-                                       const QStringList &denylistUrls) const
+                                      const QStringList &denylistUrls) const
 {
     QString config;
 

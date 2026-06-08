@@ -31,53 +31,53 @@ Page {
     }
 
     Component.onCompleted: loadPage()
-    onStatusChanged: if (status === PageStatus.Active) loadPage()
+    onStatusChanged: if (status === PageStatus.Active)
+        loadPage()
 
     function loadPage() {
-        loadUpstreams()
-        loadDenylist()
-        config.text = manager.readConfig()
+        loadUpstreams();
+        loadDenylist();
+        config.text = manager.readConfig();
     }
 
     function loadUpstreams() {
-        upstreamsModel.clear()
-        var list = manager.upstreams()
+        upstreamsModel.clear();
+        var list = manager.upstreams();
         for (var i = 0; i < list.length; i++) {
             upstreamsModel.append({
-                                      "value": list[i]
-                                  })
+                "value": list[i]
+            });
         }
     }
 
     function loadDenylist() {
-        denylistModel.clear()
-        var list = manager.denylist()
+        denylistModel.clear();
+        var list = manager.denylist();
         for (var i = 0; i < list.length; i++) {
             denylistModel.append({
-                                     "value": list[i]
-                                 })
+                "value": list[i]
+            });
         }
     }
 
     function collectList(model) {
-        var arr = []
+        var arr = [];
         for (var i = 0; i < model.count; i++) {
-            var val = model.get(i).value.trim()
+            var val = model.get(i).value.trim();
             if (val.length > 0) {
-                arr.push(val)
+                arr.push(val);
             }
         }
-        return arr
+        return arr;
     }
 
     Connections {
         target: appWindow
         onRestartError: {
-            errorMsg.text = qsTr(
-                        "ERROR! blocky start failed with: %1").arg(message)
-            errorMsg.visible = true
-            saveBtn.enabled = true
-            busy.visible = busy.running = false
+            errorMsg.text = qsTr("ERROR! blocky start failed with: %1").arg(message);
+            errorMsg.visible = true;
+            saveBtn.enabled = true;
+            busy.visible = busy.running = false;
         }
     }
 
@@ -117,8 +117,8 @@ Page {
                         placeholderText: qsTr("DNS server address")
                         inputMethodHints: Qt.ImhNoAutoUppercase
                         onTextChanged: upstreamsModel.set(index, {
-                                                              "value": text
-                                                          })
+                            "value": text
+                        })
                     }
 
                     IconButton {
@@ -133,8 +133,8 @@ Page {
                 anchors.horizontalCenter: parent.horizontalCenter
                 text: qsTr("Add DNS")
                 onClicked: upstreamsModel.append({
-                                                     "value": ""
-                                                 })
+                    "value": ""
+                })
             }
 
             SectionHeader {
@@ -153,8 +153,8 @@ Page {
                         placeholderText: qsTr("Denylist URL")
                         inputMethodHints: Qt.ImhNoAutoUppercase
                         onTextChanged: denylistModel.set(index, {
-                                                             "value": text
-                                                         })
+                            "value": text
+                        })
                     }
 
                     IconButton {
@@ -169,8 +169,8 @@ Page {
                 anchors.horizontalCenter: parent.horizontalCenter
                 text: qsTr("Add denylist")
                 onClicked: denylistModel.append({
-                                                    "value": ""
-                                                })
+                    "value": ""
+                })
             }
 
             Separator {
@@ -198,19 +198,18 @@ Page {
                 anchors.horizontalCenter: parent.horizontalCenter
 
                 onClicked: {
-                    errorMsg.visible = false
-                    saveBtn.enabled = false
-                    busy.visible = busy.running = true
+                    errorMsg.visible = false;
+                    saveBtn.enabled = false;
+                    busy.visible = busy.running = true;
 
-                    manager.saveFromEntries(collectList(upstreamsModel),
-                                            collectList(denylistModel))
+                    manager.saveFromEntries(collectList(upstreamsModel), collectList(denylistModel));
 
-                    appWindow.restartBlocky()
+                    appWindow.restartBlocky();
 
-                    config.text = manager.readConfig()
+                    config.text = manager.readConfig();
 
-                    saveBtn.enabled = true
-                    busy.visible = busy.running = false
+                    saveBtn.enabled = true;
+                    busy.visible = busy.running = false;
                 }
             }
 

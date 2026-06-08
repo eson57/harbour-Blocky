@@ -21,8 +21,7 @@ import Sailfish.Silica 1.0
 import Nemo.DBus 2.0
 import "pages"
 
-ApplicationWindow
-{
+ApplicationWindow {
     id: appWindow
 
     signal restartError(string message)
@@ -44,22 +43,26 @@ ApplicationWindow
         iface: 'org.freedesktop.systemd1.Manager'
     }
 
-    initialPage: Component { MainPage { } }
+    initialPage: Component {
+        MainPage {}
+    }
     cover: Qt.resolvedUrl("cover/CoverPage.qml")
 
     function restartBlocky() {
-        systemd.typedCall('RestartUnit',
-            [
-                { 'type': 's', 'value': 'blocky.service' },
-                { 'type': 's', 'value': 'fail' }
-            ],
-            function(result) {
-                console.log("Success! Blocky started.");
+        systemd.typedCall('RestartUnit', [
+            {
+                'type': 's',
+                'value': 'blocky.service'
             },
-            function(error, message) {
-                console.log("Restart failed (" + error + ") with:", message);
-                appWindow.restartError(message)
+            {
+                'type': 's',
+                'value': 'fail'
             }
-        );
+        ], function (result) {
+            console.log("Success! Blocky started.");
+        }, function (error, message) {
+            console.log("Restart failed (" + error + ") with:", message);
+            appWindow.restartError(message);
+        });
     }
 }

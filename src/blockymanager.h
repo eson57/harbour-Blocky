@@ -51,7 +51,7 @@ public:
     Q_INVOKABLE QString fullConfig();
 
     Q_INVOKABLE void saveFromEntries(const QStringList &upstreamServers,
-                                      const QStringList &denylistUrls);
+                                     const QStringList &denylistUrls);
 
     Q_INVOKABLE bool apiEnabled();
     Q_INVOKABLE void setApiEnabled(bool enabled);

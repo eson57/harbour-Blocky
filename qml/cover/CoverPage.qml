@@ -1,5 +1,3 @@
-
-
 /*
     Copyright (C) 2023 Andrea Scarpino <andrea@scarpino.dev>
     All rights reserved.
@@ -27,14 +25,14 @@ CoverBackground {
 
     function formatTime(seconds) {
         if (seconds >= 60) {
-            var m = Math.floor(seconds / 60)
-            var s = seconds % 60
+            var m = Math.floor(seconds / 60);
+            var s = seconds % 60;
             if (s > 0) {
-                return qsTr("%1m %2s").arg(m).arg(s)
+                return qsTr("%1m %2s").arg(m).arg(s);
             }
-            return qsTr("%1m").arg(m)
+            return qsTr("%1m").arg(m);
         }
-        return qsTr("%1s").arg(seconds)
+        return qsTr("%1s").arg(seconds);
     }
 
     Timer {
@@ -43,19 +41,18 @@ CoverBackground {
         repeat: true
         onTriggered: {
             if (remainingSeconds > 0) {
-                remainingSeconds--
+                remainingSeconds--;
             }
             if (remainingSeconds <= 0) {
-                stop()
-                blockingDisabled = false
+                stop();
+                blockingDisabled = false;
             }
         }
     }
 
     CoverPlaceholder {
         id: placeholder
-        text: blockingDisabled ? qsTr("Blocking disabled for:\n%1").arg(
-                                     formatTime(remainingSeconds)) : "Blocky"
+        text: blockingDisabled ? qsTr("Blocking disabled for:\n%1").arg(formatTime(remainingSeconds)) : "Blocky"
         icon.source: "/usr/share/icons/hicolor/86x86/apps/harbour-blocky.png"
     }
 
@@ -68,16 +65,16 @@ CoverBackground {
             onTriggered: {
                 if (blockingDisabled) {
                     if (client.enableBlocking()) {
-                        countdownTimer.stop()
-                        remainingSeconds = 0
-                        blockingDisabled = false
+                        countdownTimer.stop();
+                        remainingSeconds = 0;
+                        blockingDisabled = false;
                     }
                 } else {
-                    var duration = manager.disableDuration()
+                    var duration = manager.disableDuration();
                     if (client.disableBlocking(duration)) {
-                        remainingSeconds = duration
-                        blockingDisabled = true
-                        countdownTimer.start()
+                        remainingSeconds = duration;
+                        blockingDisabled = true;
+                        countdownTimer.start();
                     }
                 }
             }

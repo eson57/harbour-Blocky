@@ -71,9 +71,9 @@ Page {
                 placeholderText: "300"
                 inputMethodHints: Qt.ImhDigitsOnly
                 onTextChanged: {
-                    var val = parseInt(text)
+                    var val = parseInt(text);
                     if (!isNaN(val) && val > 0) {
-                        manager.setDisableDuration(val)
+                        manager.setDisableDuration(val);
                     }
                 }
             }
@@ -101,12 +101,10 @@ Page {
                 anchors.horizontalCenter: parent.horizontalCenter
 
                 onClicked: {
-                    Remorse.popupAction(resetBtn, qsTr(
-                                            "Restoring default configuration"),
-                                        function () {
-                                            manager.resetConfig()
-                                            appWindow.restartBlocky()
-                                        })
+                    Remorse.popupAction(resetBtn, qsTr("Restoring default configuration"), function () {
+                        manager.resetConfig();
+                        appWindow.restartBlocky();
+                    });
                 }
             }
 

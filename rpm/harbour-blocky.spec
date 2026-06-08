@@ -11,7 +11,7 @@ Name:       harbour-blocky
 %{?qtc_builddir:%define _builddir %qtc_builddir}
 Summary:    blocky
 Version:    0.0.9
-Release:    1
+Release:    2
 Group:      Qt/Qt
 License:    GPLv3
 URL:        https://scarpino.dev

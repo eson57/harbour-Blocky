@@ -27,20 +27,49 @@
 
 #include <QObject>
 #include <QString>
+#include <QStringList>
 
 class BlockyManager : public QObject
 {
     Q_OBJECT
+    Q_PROPERTY(bool apiEnabled READ apiEnabled WRITE setApiEnabled NOTIFY apiEnabledChanged)
+
 public:
     explicit BlockyManager(QObject *parent = 0);
     virtual ~BlockyManager();
 
     Q_INVOKABLE QString readConfig();
+
     Q_INVOKABLE void saveConfig(const QString content);
+
+    Q_INVOKABLE QStringList upstreams();
+    Q_INVOKABLE void setUpstreams(const QStringList &servers);
+
+    Q_INVOKABLE QStringList denylist();
+    Q_INVOKABLE void setDenylist(const QStringList &urls);
+
+    Q_INVOKABLE QString fullConfig();
+
+    Q_INVOKABLE void saveFromEntries(const QStringList &upstreamServers,
+                                      const QStringList &denylistUrls);
+
+    Q_INVOKABLE bool apiEnabled();
+    Q_INVOKABLE void setApiEnabled(bool enabled);
+
+    Q_INVOKABLE int disableDuration();
+    Q_INVOKABLE void setDisableDuration(int seconds);
+
+    Q_INVOKABLE void resetConfig();
 
 Q_SIGNALS:
     void migratedConfig();
+    void apiEnabledChanged();
 
+private:
+    QStringList parseList(const QString &section, const QString &listName) const;
+    QString generateConfig(const QStringList &upstreamServers,
+                           const QStringList &denylistUrls) const;
+    QString m_settingsPath;
 };
 
 #endif // BLOCKYMANAGER_H

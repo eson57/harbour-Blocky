@@ -25,10 +25,11 @@ ApplicationWindow
 {
     id: appWindow
 
+    signal restartError(string message)
+
     Connections {
         target: manager
 
-        // here because it's emitted too fast
         onMigratedConfig: {
             restartBlocky();
         }
@@ -57,11 +58,8 @@ ApplicationWindow
             },
             function(error, message) {
                 console.log("Restart failed (" + error + ") with:", message);
-                errorMsg.text = qsTr("ERROR! blocky start failed with: %1").arg(message);
-                errorMsg.visible = true;
+                appWindow.restartError(message)
             }
         );
     }
 }
-
-

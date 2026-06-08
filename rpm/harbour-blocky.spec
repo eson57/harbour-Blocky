@@ -28,6 +28,7 @@ Source4:    connman.override.conf
 Requires:   sailfishsilica-qt5 >= 0.10.9
 BuildRequires:  pkgconfig(sailfishapp) >= 1.0.2
 BuildRequires:  pkgconfig(Qt5Core)
+BuildRequires:  pkgconfig(Qt5Network)
 BuildRequires:  pkgconfig(Qt5Qml)
 BuildRequires:  pkgconfig(Qt5Quick)
 BuildRequires:  desktop-file-utils
@@ -78,7 +79,6 @@ install -Dm644 %{SOURCE4} %{buildroot}%{_sysconfdir}/systemd/system/connman.serv
 
 install -d %{buildroot}%{_sysconfdir}/tmpfiles.d
 touch %{buildroot}%{_sysconfdir}/tmpfiles.d/connman_resolvconf.conf
-
 # << install post
 
 desktop-file-install --delete-original       \
@@ -90,7 +90,7 @@ desktop-file-install --delete-original       \
 %attr(4755,root,root) %{_bindir}/%{name}
 %{_bindir}/blocky
 %{_datadir}/%{name}
-%{_sysconfdir}/blocky.yaml
+%config(noreplace) %{_sysconfdir}/blocky.yaml
 %{_datadir}/%{name}/blocky.yaml
 %{_sysconfdir}/systemd/system/connman.service.d/override.conf
 %{_sysconfdir}/tmpfiles.d/connman_resolvconf.conf

@@ -15,7 +15,6 @@
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
-
 import QtQuick 2.0
 import Sailfish.Silica 1.0
 
@@ -23,9 +22,75 @@ Page {
 
     allowedOrientations: Orientation.All
 
+    ListModel {
+        id: upstreamsModel
+    }
+
+    ListModel {
+        id: denylistModel
+    }
+
+    Component.onCompleted: loadPage()
+    onStatusChanged: if (status === PageStatus.Active) loadPage()
+
+    function loadPage() {
+        loadUpstreams()
+        loadDenylist()
+        config.text = manager.readConfig()
+    }
+
+    function loadUpstreams() {
+        upstreamsModel.clear()
+        var list = manager.upstreams()
+        for (var i = 0; i < list.length; i++) {
+            upstreamsModel.append({
+                                      "value": list[i]
+                                  })
+        }
+    }
+
+    function loadDenylist() {
+        denylistModel.clear()
+        var list = manager.denylist()
+        for (var i = 0; i < list.length; i++) {
+            denylistModel.append({
+                                     "value": list[i]
+                                 })
+        }
+    }
+
+    function collectList(model) {
+        var arr = []
+        for (var i = 0; i < model.count; i++) {
+            var val = model.get(i).value.trim()
+            if (val.length > 0) {
+                arr.push(val)
+            }
+        }
+        return arr
+    }
+
+    Connections {
+        target: appWindow
+        onRestartError: {
+            errorMsg.text = qsTr(
+                        "ERROR! blocky start failed with: %1").arg(message)
+            errorMsg.visible = true
+            saveBtn.enabled = true
+            busy.visible = busy.running = false
+        }
+    }
+
     SilicaFlickable {
         anchors.fill: parent
         contentHeight: column.height
+
+        PullDownMenu {
+            MenuItem {
+                text: qsTr("Settings")
+                onClicked: pageStack.push(Qt.resolvedUrl("SettingsPage.qml"))
+            }
+        }
 
         Column {
             id: column
@@ -36,10 +101,82 @@ Page {
                 title: "Blocky"
             }
 
-            TextArea {
-                id: config
-                focus: true
-                text: manager.readConfig()
+            SectionHeader {
+                text: qsTr("DNS")
+            }
+
+            Repeater {
+                model: upstreamsModel
+
+                Row {
+                    width: parent.width
+
+                    TextField {
+                        width: parent.width - removeUpstreamBtn.width - Theme.paddingMedium
+                        text: value
+                        placeholderText: qsTr("DNS server address")
+                        inputMethodHints: Qt.ImhNoAutoUppercase
+                        onTextChanged: upstreamsModel.set(index, {
+                                                              "value": text
+                                                          })
+                    }
+
+                    IconButton {
+                        id: removeUpstreamBtn
+                        icon.source: "image://theme/icon-m-clear"
+                        onClicked: upstreamsModel.remove(index)
+                    }
+                }
+            }
+
+            Button {
+                anchors.horizontalCenter: parent.horizontalCenter
+                text: qsTr("Add DNS")
+                onClicked: upstreamsModel.append({
+                                                     "value": ""
+                                                 })
+            }
+
+            SectionHeader {
+                text: qsTr("Denylists")
+            }
+
+            Repeater {
+                model: denylistModel
+
+                Row {
+                    width: parent.width
+
+                    TextField {
+                        width: parent.width - removeDenylistBtn.width - Theme.paddingMedium
+                        text: value
+                        placeholderText: qsTr("Denylist URL")
+                        inputMethodHints: Qt.ImhNoAutoUppercase
+                        onTextChanged: denylistModel.set(index, {
+                                                             "value": text
+                                                         })
+                    }
+
+                    IconButton {
+                        id: removeDenylistBtn
+                        icon.source: "image://theme/icon-m-clear"
+                        onClicked: denylistModel.remove(index)
+                    }
+                }
+            }
+
+            Button {
+                anchors.horizontalCenter: parent.horizontalCenter
+                text: qsTr("Add denylist")
+                onClicked: denylistModel.append({
+                                                    "value": ""
+                                                })
+            }
+
+            Separator {
+                width: parent.width
+                color: Theme.highlightBackgroundColor
+                horizontalAlignment: Qt.AlignHCenter
             }
 
             BusyIndicator {
@@ -52,22 +189,56 @@ Page {
                 id: errorMsg
                 visible: false
                 anchors.horizontalCenter: parent.horizontalCenter
+                color: Theme.errorColor
             }
 
             Button {
-                id: start
+                id: saveBtn
                 text: qsTr("Save and restart")
                 anchors.horizontalCenter: parent.horizontalCenter
 
                 onClicked: {
-                    enabled = config.enabled = errorMsg.visible = false;
-                    busy.visible = busy.running = true;
-                    manager.saveConfig(config.text);
-                    appWindow.restartBlocky();
-                    enabled = config.enabled = true;
-                    busy.visible = busy.running = false;
+                    errorMsg.visible = false
+                    saveBtn.enabled = false
+                    busy.visible = busy.running = true
+
+                    manager.saveFromEntries(collectList(upstreamsModel),
+                                            collectList(denylistModel))
+
+                    appWindow.restartBlocky()
+
+                    config.text = manager.readConfig()
+
+                    saveBtn.enabled = true
+                    busy.visible = busy.running = false
                 }
             }
+
+            SectionHeader {
+                text: qsTr("Raw configuration")
+            }
+
+            Label {
+                anchors {
+                    left: parent.left
+                    right: parent.right
+                    leftMargin: Theme.horizontalPageMargin
+                    rightMargin: Theme.horizontalPageMargin
+                }
+                color: Theme.secondaryColor
+                font.pixelSize: Theme.fontSizeExtraSmall
+                text: qsTr("The generated raw configuration:")
+                wrapMode: Text.Wrap
+            }
+
+            TextArea {
+                id: config
+                width: parent.width
+                readOnly: true
+                text: manager.readConfig()
+            }
         }
+
+        VerticalScrollDecorator {}
     }
 }

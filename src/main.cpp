@@ -20,6 +20,7 @@
 
 #include <sailfishapp.h>
 
+#include "blockyclient.h"
 #include "blockymanager.h"
 
 int main(int argc, char *argv[])
@@ -33,7 +34,9 @@ int main(int argc, char *argv[])
     QCoreApplication::setOrganizationName(QStringLiteral("dev.scarpino"));
 
     BlockyManager manager;
+    BlockyClient client;
     view->rootContext()->setContextProperty("manager", &manager);
+    view->rootContext()->setContextProperty("client", &client);
 
     view->setSource(SailfishApp::pathTo("qml/Blocky.qml"));
     view->show();
